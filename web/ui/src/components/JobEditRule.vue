@@ -1,24 +1,24 @@
 <template>
 <div style="margin-bottom:20px;">
-  <h4 class="ui horizontal divider header">定时器 - {{index}} <a href="#" v-on:click.prevent="remove">删除</a></h4>
+  <h4 class="ui horizontal divider header">{{$L('timer')}} - {{index}} <a href="#" v-on:click.prevent="remove">{{$L('delete')}}</a></h4>
   <div class="two fields">
     <div class="field">
       <div class="ui icon input">
-        <input type="text" v-bind:value="rule.timer" v-on:input="change('timer', $event.target.value)" placeholder="定时 * 5 * * * *"/>
-        <i ref="ruletip" class="large help circle link icon" data-position="top right" data-content="<秒> <分钟> <小时> <日> <月份> <星期>，规则与 crontab 一样" data-variation="wide"></i>
+        <input type="text" v-bind:value="rule.timer" v-on:input="change('timer', $event.target.value)" :placeholder="$L('0 * * * * *, rules see the 「?」on the right')"/>
+        <i ref="ruletip" class="large help circle link icon" data-position="top right" :data-content="$L('<sec> <min> <hr> <day> <month> <week>, rules is same with Cron')" data-variation="wide"></i>
       </div>
     </div>
     <div class="field">
-      <Dropdown title="节点分组" v-bind:items="nodeGroups" v-bind:selected="rule.gids" multiple="true" v-on:change="changeNodeGroups($event)"></Dropdown>
+      <Dropdown :title="$L('node group')" v-bind:items="nodeGroups" v-bind:selected="rule.gids" multiple="true" v-on:change="changeNodeGroups($event)"></Dropdown>
     </div>
   </div>
   <div class="field">
-    <label>同时在这些节点上面运行任务</label>
-    <Dropdown title="选择节点" v-bind:items="activityNodes" v-bind:selected="rule.nids" v-on:change="changeIncludeNodes($event)" multiple="true"></Dropdown>
+    <label>{{$L('and please running on those nodes')}}</label>
+    <Dropdown :title="$L('select nodes')" v-bind:items="activityNodes" v-bind:selected="rule.nids" v-on:change="changeIncludeNodes($event)" multiple="true"></Dropdown>
   </div>
   <div class="field">
-    <label>不在这些节点上面运行任务</label>
-    <Dropdown title="选择节点" v-bind:items="activityNodes" v-bind:selected="rule.exclude_nids" v-on:change="changeExcludeNodes($event)" multiple="true"></Dropdown>
+    <label>{{$L('do not running on those nodes')}}</label>
+    <Dropdown :title="$L('select nodes')" v-bind:items="activityNodes" v-bind:selected="rule.exclude_nids" v-on:change="changeExcludeNodes($event)" multiple="true"></Dropdown>
   </div>
 </div>
 </template>
@@ -38,12 +38,7 @@ export default {
 
   mounted: function(){
     var vm = this;
-    this.$rest.GET('nodes').onsucceed(200, (resp)=>{
-      for (var i in resp) {
-        vm.activityNodes.push(resp[i].id);
-      }
-    }).do();
-
+    this.activityNodes = this.$store.getters.dropdownNodes;
 
     this.$rest.GET('node/groups').onsucceed(200, (resp)=>{
       var groups = [];

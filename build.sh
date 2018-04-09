@@ -17,13 +17,13 @@ go build -o ./$out/cronnode ./bin/node/server.go
 check_code
 go build -o ./$out/cronweb ./bin/web/server.go
 check_code
-
-cp -r web/ui/dist "$out/ui"
+go build -o ./$out/csctl ./bin/csctl/cmd.go
+check_code
 
 sources=`find ./conf/files -name "*.json.sample"`
 check_code
 for source in $sources;do
-	yes | echo $source|sed "s/.*\/\(\w*\.json\).*/cp -f & .\/$out\/conf\/\1/"|bash
+	yes | echo $source|sed "s/.*\/\(.*\.json\).*/cp -f & .\/$out\/conf\/\1/"|bash
 	check_code
 done
 

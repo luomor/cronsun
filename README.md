@@ -1,10 +1,30 @@
 # cronsun [![Build Status](https://travis-ci.org/shunfei/cronsun.svg?branch=master)](https://travis-ci.org/shunfei/cronsun)
 
-`cronsun` 是一个分布式任务系统，单个结点和 `*nix` 机器上的 `crontab` 近似。支持界面管理机器上的任务，支持任务失败邮件提醒，安装简单，使用方便，是替换 `crontab` 一个不错的选择。
+`cronsun` is a distributed cron-style job system. It's similar with `crontab` on stand-alone `*nix`.
 
-`cronsun` 是为了解决多台 `*nix` 机器上`crontab` 任务管理不方便的问题，同时提供任务高可用的支持（当某个节点死机的时候可以自动调度到正常的节点执行）。`cronsun` 和 [Azkaban](https://azkaban.github.io/)、[Chronos](https://mesos.github.io/chronos/)、[Airflow](https://airflow.incubator.apache.org/) 这些不是同一类型的。
+[简体中文](README_ZH.md)
 
-## 架构
+## Purpose
+
+The goal of this project is to make it much easier to manage jobs on lots of machines and provides high availability.
+`cronsun` is different from [Azkaban](https://azkaban.github.io/), [Chronos](https://mesos.github.io/chronos/), [Airflow](https://airflow.incubator.apache.org/).
+
+## Features
+
+- Easy manage jobs on multiple machines
+- Managemant panel
+- Mail service
+- Multi-language support
+- Simple authentication and accounts manager(default administrator email and password: admin@admin.com/admin)
+
+## Status
+
+`cronsun` has been tested in production for years on hundreds of servers. 
+Although the current version is not release as an stable version, but we think it is completely available for the production environment.
+We encourage you to try it, it's easy to use, see how it works for you. We believe you will like this tool.
+
+
+## Architecture
 
 ```
                                                 [web]
@@ -22,70 +42,68 @@
 ```
 
 
-## 安全性
+## Security
 
-`cronsun`是在管理后台添加任务的，所以一旦管理后台泄露出去了，则存在一定的危险性，所以`cronsun`支持`security.json`的安全设置：
+`cronsun` support security with `security.json` config. When `open=true`， job command is only allow local files with special extension on the node.
 
 ```json
 {
     "open": true,
-    "#users": "允许选择运行脚本的用户",
+    "#users": "allowed execution users",
     "users": [
         "www", "db"
     ],
-    "#ext": "允许添加以下扩展名结束的脚本",
+    "#ext": "allowed execution file extensions",
     "ext": [
         ".cron.sh", ".cron.py"
     ]
 }
 ```
 
-如上设置开启安全限制，则添加和执行任务的时候只允许选择配置里面指定的用户来执行脚本，并且脚本的扩展名要在配置的脚本扩展名限制列表里面。
-
-
 ## Getting started
 
 ### Setup / installation
 
-Building with the source, require go >= 1.7+
+Install from binary [latest release](https://github.com/shunfei/cronsun/releases/latest)
+
+Or build from source ([feature/glide](https://github.com/shunfei/cronsun/tree/feature/glide)), require `go >= 1.9+`, [glide](https://glide.sh/)
 
 ```
 go get -u github.com/shunfei/cronsun
 cd $GOPATH/src/github.com/shunfei/cronsun
+git checkout feature/glide
+glide update
 sh build.sh
 ```
 
-Or install with the binary [releases](https://github.com/shunfei/cronsun/releases)
-
-执行文件和配置文件在 `dist` 文件夹
-
 ### Run
 
-1. 安装 [MongoDB](http://docs.mongodb.org/manual/installation/)
-2. 安装 [etcd3](https://github.com/coreos/etcd)
-3. 修改 `conf` 相关的配置
-4. 在任务结点启动 `./cronnode -conf conf/base.json`，在管理结点启动 `./cronweb -conf conf/base.json`
-5. 访问管理界面 `http://127.0.0.1:7079/ui/`
+1. Install [MongoDB](http://docs.mongodb.org/manual/installation/)
+2. Install [etcd3](https://github.com/coreos/etcd)
+3. Open and update Etcd(`conf/etcd.json`) and MongoDB(`conf/db.json`) configurations
+4. Start cronnode: `./cronnode -conf conf/base.json`, start cronweb: `./cronweb -conf conf/base.json`
+5. Open `http://127.0.0.1:7079` in browser
 
 ## Screenshot
 
 **Brief**:
 
-![](doc/img/brief.png)
+![](doc/img/Cronsun_dashboard_en.png)
 
 **Exec result**:
 
-![](doc/img/log.png)
+![](doc/img/Cronsun_log_list_en.png)
+![](doc/img/Cronsun_log_item_en.png)
 
 **Job**:
 
-![](doc/img/job.png)
+![](doc/img/Cronsun_job_list_en.png)
 
-![](doc/img/new_job.png)
+![](doc/img/Cronsun_job_new_en.png)
 
 **Node**:
 
-![](doc/img/node.png)
+![](doc/img/Cronsun_node_en.png)
 
 ## Credits
 

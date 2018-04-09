@@ -20,7 +20,7 @@
 <template>
   <div>
     <div class="clearfix">
-      <router-link class="ui right floated primary button" to="/node/group/create"><i class="add icon"></i> 新分组</router-link>
+      <router-link class="ui right floated primary button" to="/node/group/create"><i class="add icon"></i> {{$L('create group')}}</router-link>
       <button class="ui right floated icon button" v-on:click="refresh"><i class="refresh icon"></i></button>
     </div>
     <div v-if="error != ''" class="header"><i class="attention icon"></i> {{error}}</div>
@@ -30,7 +30,13 @@
           <router-link class="header" :to="'/node/group/'+g.id">{{g.name}}</router-link>
           <div class="description">
             <div class="ui middle large aligned divided list"> 
-              <div class="item" v-for="n in g.nids">{{n}}</div>
+              <div class="item" v-for="nodeID in g.nids">
+                <span v-if="nodes[nodeID]">{{$store.getters.hostshows(nodeID)}}
+                <i class="arrow circle up icon red" v-if="nodes[nodeID].hostname == ''"></i>
+                <i v-if="nodes[nodeID].hostname == ''">(need to upgrade)</i>
+                </span>
+                <span v-else :title="$L('node not found, was it removed?')">{{nodeID}} <i class="question circle icon red"></i></span>
+              </div>
             </div>
           </div>
         </div>
@@ -62,6 +68,12 @@ export default {
         onfailed((data)=>{vm.error = data}).
         onend(()=>{vm.loading = false}).
         do();
+    }
+  },
+
+  computed: {
+    nodes: function () {
+      return this.$store.getters.nodes;
     }
   }
 }
