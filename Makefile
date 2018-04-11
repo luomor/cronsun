@@ -2,7 +2,7 @@ RPMBUILD_TGZ=rpmbuild --tb
 RPMBUILD_ROOT=${HOME}/rpmbuild/
 
 NAME=cronsun
-VERSION=0.1.0
+VERSION=0.1.1
 SRCPATH=${NAME}-${VERSION}
 SRCFILE=${NAME}-${VERSION}.tgz
 
