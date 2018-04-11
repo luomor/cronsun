@@ -5,14 +5,14 @@
   /usr/lib/rpm/brp-compress
 
 Name:       cronsun
-Version:    0.1.0
+Version:    0.1.1
 Release:    1%{?dist}
 Summary:    A distributed job system, similar with distributed crontab
 
 
 Group:      System Environment/Daemons
 License:    Apache License Version 2.0
-URL:        https://github.com/guoxiaod/cronsun
+URL:        https://github.com/zhangchunsheng/cronsun
 Source0:    %{name}-%{version}.tgz
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 
@@ -118,6 +118,9 @@ systemctl disable cronnode
 
 
 %changelog
+
+* Wed Apr 11 2018 - zhangchunsheng423@gmail.com 0.1.1
+- upgrade
 
 * Mon Apr 09 2018 - zhangchunsheng423@gmail.com 0.1.0
 - init version

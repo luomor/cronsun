@@ -1,5 +1,6 @@
 [cronsun_1.0.0.1 2018-04-11 zhangchunsheng]
 1.新功能:add .idea ignore
+2.新功能:upgrade code
 
 --备注分类
 1、新功能：
