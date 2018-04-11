@@ -1,0 +1,14 @@
+[cronsun_1.0.0.1 2018-04-11 zhangchunsheng]
+1.新功能:add .idea ignore
+
+--备注分类
+1、新功能：
+2、Bug:
+3、需求变更：
+4、重构：
+5、merge:
+
+--格式：
+[cronsun_1.0.0.1 2018-04-11 zhangchunsheng]
+版本号 日期 提交人
+版本号：产品名 版本类型 主版本 辅版本 新功能版本 缺陷版本
