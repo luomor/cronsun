@@ -9,12 +9,12 @@ SRCFILE=${NAME}-${VERSION}.tgz
 all:fetch build copy
 
 fetch:
-        rm -rf ../${SRCPATH} ../${SRCFILE}
-        cp -r ../cronsun ../${SRCPATH}
-        cd .. && tar -czf ${SRCFILE} ${SRCPATH}
+    rm -rf ../${SRCPATH} ../${SRCFILE}
+    cp -r ../cronsun ../${SRCPATH}
+    cd .. && tar -czf ${SRCFILE} ${SRCPATH}
 
 build:
-        ${RPMBUILD_TGZ} ../${SRCFILE}
+    ${RPMBUILD_TGZ} ../${SRCFILE}
 
 copy:
-        cp ${RPMBUILD_ROOT}/RPMS/*/${NAME}*${VERSION}*.rpm .
+    cp ${RPMBUILD_ROOT}/RPMS/*/${NAME}*${VERSION}*.rpm .
