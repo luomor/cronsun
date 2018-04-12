@@ -1,0 +1,21 @@
+# It's not recommended to modify this file in-place, because it
+# will be overwritten during upgrades.  If you want to customize,
+# the best way is to use the "systemctl edit" command.
+
+[Unit]
+Description=The cronnode Process Manager
+After=syslog.target network.target
+
+[Service]
+Type=simple
+PIDFile=/var/run/cronnode.pid
+ExecStartPre=/usr/bin/mkdir -p /var/run/cronnode
+ExecStart=/usr/sbin/cronnode -conf /etc/cronsun/base.json
+ExecStop=/bin/kill -s TERM $MAINPID
+PrivateTmp=false
+RestartSec=1
+TimeoutStopSec=30
+
+[Install]
+WantedBy=multi-user.target
+

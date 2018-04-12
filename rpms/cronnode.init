@@ -1,0 +1,94 @@
+#!/bin/bash
+#
+# Startup script for cronsun-node
+# chkconfig: 2345 92 36
+# description: cronsun-node Daemon
+# processname: cronnode
+# config: /etc/cronsun/base.json
+
+# Source function library.
+if [ -f /etc/init.d/functions ] ; then
+  . /etc/init.d/functions
+elif [ -f /etc/rc.d/init.d/functions ] ; then
+  . /etc/rc.d/init.d/functions
+else
+  exit 0
+fi
+
+if [ -f /etc/sysconfig/cronsun ]; then
+  . /etc/sysconfig/cronsun
+fi
+
+# Some definitions.
+cronnode=/usr/sbin/cronnode
+prog=cronnode
+RETVAL=0
+pidfile=/var/run/cronnode.pid
+lockfile=/var/lock/subsys/cronnode
+logfile=/var/log/cronsun.log
+
+CONFIGFILE=/etc/cronsun/base.json
+
+OPTIONS="-conf $CONFIGFILE -l 4 >> $logfile 2>&1 &"
+
+start() {
+    pid="$(__pids_pidof "$cronnode")"
+
+    if [ x"$pid" != x ]; then 
+        [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+        echo -n "WARNING: $cronnode($pid) already running!"
+        [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+        echo 
+        return 1
+    fi
+    echo -n $"Starting $prog: "
+    daemon --pidfile=$pidfile $cronnode $OPTIONS 
+    RETVAL=$?
+    echo
+    if [ $RETVAL = 0 ] ; then
+       touch $lockfile
+    else
+       RETVAL=1
+    fi
+    return $RETVAL
+}
+
+stop() {
+    echo -n $"Stopping $prog: "
+    killproc -d 30 $cronnode
+    RETVAL=$?
+    echo
+    if [ $RETVAL = 0 ] ; then
+       rm -f $lockfile
+    else
+       RETVAL=1
+    fi
+    return $RETVAL
+}
+
+# See how we were called.
+case "$1" in
+    start)
+        start
+        ;;
+    stop)
+        stop 
+        ;;
+    status)
+        status $cronnode
+        RETVAL=$?
+        ;;
+    restart)
+        stop
+        start
+        ;;
+    condrestart)
+        [ -f $lockfile ] && restart
+        ;;
+    *)
+        echo $"Usage: $prog {start|stop|restart|status}"
+        exit 1
+esac
+
+exit $RETVAL
+
